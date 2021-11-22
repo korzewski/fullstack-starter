@@ -4,6 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force"
   },
   "dependencies": {

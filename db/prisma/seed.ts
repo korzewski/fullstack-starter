@@ -2,22 +2,21 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const userData: Prisma.UserCreateInput[] = [
+const userData: Prisma.TodoCreateInput[] = [
   {
-    name: 'Alice',
-    email: 'alice@gmail.com,'
+    name: 'Prisma + PostgreSQL',
+    checked: true,
   },
   {
-    name: 'Bob',
-    email: 'bob@gmail.com',
+    name: 'GraphQL',
   }
 ]
 
 async function main() {
   console.log(`Start seeding ...`)
   userData.forEach(async data => {
-    const user = await prisma.user.create({ data })
-    console.log(`Created user with id: ${user.id}`)
+    const result = await prisma.todo.create({ data })
+    console.log(`Created todo with id: ${result.id} name: ${result.name}`)
   })
   console.log(`Seeding finished.`)
 }
