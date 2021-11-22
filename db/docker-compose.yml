@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  pgdb:
+    container_name: pg_db
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdb_volume:/var/lib/postgresql
+
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports: 
+      - "8432:8081"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@pgdb:5432/postgres?sslmode=disable
+    depends_on:
+      - pgdb
+
+volumes:
+  pgdb_volume:
