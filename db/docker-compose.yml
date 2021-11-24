@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdb_volume:/var/lib/postgresql
 
@@ -17,8 +17,8 @@ services:
     container_name: pgweb
     restart: always
     image: sosedoff/pgweb
-    ports: 
-      - "3001:8081"
+    ports:
+      - '3001:8081'
     environment:
       - DATABASE_URL=postgres://postgres:postgres@pgdb:5432/postgres?sslmode=disable
     depends_on:

@@ -9,7 +9,7 @@ const userData: Prisma.TodoCreateInput[] = [
   },
   {
     name: 'GraphQL',
-  }
+  },
 ]
 
 async function main() {
@@ -22,7 +22,7 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error(e)
     process.exit(1)
   })

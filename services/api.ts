@@ -10,9 +10,9 @@ export async function todoGet(id: Todo['id']) {
 }
 
 export async function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
-  const response = await fetch(`/api/todo/${id}`,{
+  const response = await fetch(`/api/todo/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(todoUpdate)
+    body: JSON.stringify(todoUpdate),
   })
   return response
 }
