@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../../services/prisma'
+import prisma from '@/services/prisma'
 import type { TodoGetAllResponse } from './index.d'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
