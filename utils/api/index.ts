@@ -8,40 +8,32 @@ export function resError(res: NextApiResponse, error: Error, errorCode = 400) {
 }
 
 export function ensureReqMethod(req: NextApiRequest, res: NextApiResponse, reqMethods: RequestKeys[]) {
-  return new Promise<void>(resolve => {
-    if (!reqMethods.includes(req.method.toLowerCase() as RequestKeys)) {
-      const errorMessage = new Error(`The HTTP ${req.method} method is not supported at this route.`)
-      resError(res, errorMessage)
-    }
-
-    resolve()
-  })
+  if (!reqMethods.includes(req.method.toLowerCase() as RequestKeys)) {
+    const errorMessage = new Error(`The HTTP ${req.method} method is not supported at this route.`)
+    resError(res, errorMessage)
+  }
 }
 
-export function getQueryParam(req: NextApiRequest, res: NextApiResponse, param: string): Promise<string> {
-  return new Promise(resolve => {
-    const p = req.query[param]
-    if (typeof p !== 'string') {
-      return resError(res, new Error(`Wrong query params`))
-    }
+export function getQueryParamNumber(req: NextApiRequest, res: NextApiResponse, queryKey: string) {
+  let param = req.query[queryKey]
+  const parsedParam = Number(param)
 
-    resolve(p)
-  })
+  if (isNaN(Number(parsedParam))) {
+    throw new Error(`Wrong query param type. Expected '${queryKey}' to be number`)
+  }
+
+  return parsedParam
 }
 
 export async function requestHandler(
   req: NextApiRequest,
   res: NextApiResponse,
-  requests: Partial<{ [k in RequestKeys]: NextApiHandler<void> }>
+  requests: Partial<{ [k in RequestKeys]: NextApiHandler<void> }>,
 ) {
-  return new Promise<void>(async resolve => {
-    try {
-      const handler = requests[req.method.toLowerCase() as RequestKeys]
-      await handler(req, res)
-
-      resolve()
-    } catch (e) {
-      resError(res, e)
-    }
-  })
+  try {
+    const handler = requests[req.method.toLowerCase() as RequestKeys]
+    await handler(req, res)
+  } catch (e) {
+    resError(res, e)
+  }
 }
