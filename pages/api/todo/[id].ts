@@ -1,36 +1,40 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/services/prisma'
-import { errorResponse } from '@/utils/api'
+import { resError, getQueryParam, requestHandler } from '@/utils/api'
 import type { TodoUpdateParams, TodoUpdateResponse, TodoGetResponse } from '@/utils/api/types'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const id = req.query.id
-  if (typeof id !== 'string') {
-    return errorResponse(res, `Wrong query param id: ${id}`)
-  }
-
-  if (req.method === 'GET') {
-    return await handleGet(id, res)
-  } else if (req.method === 'PUT') {
-    const todoUpdate: TodoUpdateParams = JSON.parse(req.body)
-    return await handlePut(id, todoUpdate, res)
-  }
-
-  errorResponse(res, `The HTTP ${req.method} method is not supported at this route.`)
+  await requestHandler(req, res, {
+    get: handleGet,
+    put: handlePut,
+  })
 }
 
-async function handleGet(id: string, res: NextApiResponse) {
+async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+  const id = Number(await getQueryParam(req, res, 'id'))
+  if (isNaN(id)) {
+    return resError(res, new Error(`Query param id is: ${id}`))
+  }
+
   const todo: TodoGetResponse = await prisma.todo.findUnique({
     where: { id: Number(id) },
   })
 
+  if (!todo) {
+    return resError(res, new Error(`Wrong todo id: ${id}`))
+  }
+
   res.json(todo)
 }
 
-async function handlePut(id: string, data: TodoUpdateParams, res: NextApiResponse) {
+async function handlePut(req: NextApiRequest, res: NextApiResponse) {
+  const id = await getQueryParam(req, res, 'id')
+  const todoUpdate: TodoUpdateParams = JSON.parse(req.body)
+
   const result: TodoUpdateResponse = await prisma.todo.update({
     where: { id: Number(id) },
-    data,
+    data: todoUpdate,
   })
+
   res.json(result)
 }

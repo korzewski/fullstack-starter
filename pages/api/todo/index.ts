@@ -1,18 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/services/prisma'
+import { ensureReqMethod } from '@/utils/api'
 import type { TodoGetAllResponse } from '@/utils/api/types'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'GET') {
-    await handleGet(res)
-  } else {
-    res.status(400).json({
-      error: `The HTTP ${req.method} method is not supported at this route.`,
-    })
-  }
-}
+  await ensureReqMethod(req, res, ['get'])
 
-async function handleGet(res: NextApiResponse) {
   const result: TodoGetAllResponse = await prisma.todo.findMany()
   res.json(result)
 }
