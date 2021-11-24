@@ -1,5 +1,5 @@
 import type { Todo } from '@prisma/client'
-import { TodoGetAllResponse, TodoGetResponse, TodoUpdateParams } from '../pages/api/todo/index.d'
+import { TodoGetAllResponse, TodoGetResponse, TodoUpdateParams } from '@/utils/api/types'
 
 export async function todoGetAll() {
   return (await fetch(`/api/todo`)).json() as Promise<TodoGetAllResponse>

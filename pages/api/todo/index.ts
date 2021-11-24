@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/services/prisma'
-import type { TodoGetAllResponse } from './index.d'
+import type { TodoGetAllResponse } from '@/utils/api/types'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {

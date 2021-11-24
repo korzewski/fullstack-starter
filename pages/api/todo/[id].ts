@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/services/prisma'
 import { errorResponse } from '@/utils/api'
-import type { TodoUpdateParams, TodoUpdateResponse, TodoGetResponse } from './index.d'
+import type { TodoUpdateParams, TodoUpdateResponse, TodoGetResponse } from '@/utils/api/types'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id
