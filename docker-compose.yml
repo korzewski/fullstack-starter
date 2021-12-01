@@ -11,7 +11,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - pgdb_volume:/var/lib/postgresql
+      - pgdb-volume:/var/lib/postgresql/data
 
   pgweb:
     container_name: pgweb
@@ -25,4 +25,4 @@ services:
       - pgdb
 
 volumes:
-  pgdb_volume:
+  pgdb-volume:
