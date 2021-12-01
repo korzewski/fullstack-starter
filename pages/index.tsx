@@ -5,7 +5,7 @@ import Todos from '@/components/todos'
 
 export default ({ todos }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen py-2'>
+    <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-gray-400'>
       <Head>
         <title>Fullstack starter</title>
       </Head>
