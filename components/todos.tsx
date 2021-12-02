@@ -1,15 +1,23 @@
-import { FunctionComponent } from 'react'
-import { todoUpdate } from '@/services/api'
+import { useState, useEffect } from 'react'
+import { todoGetAll, todoUpdate } from '@/services/api'
 import { Todo } from '@prisma/client'
 
-type Props = {
-  todos: Todo[]
-}
+const todos = () => {
+  const [todos, setTodos] = useState<Todo[]>()
+  const [lastUpdate, setLastUpdate] = useState<Todo>()
 
-const todos: FunctionComponent<Props> = ({ todos }) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const todos = await todoGetAll()
+      setTodos(todos)
+    }
+
+    fetchData().catch(console.error)
+  }, [lastUpdate])
+
   const checkboxHandle = async (id: Todo['id'], checked: Todo['checked']) => {
-    const result = await todoUpdate(id, { checked: !checked })
-    console.log('--- todoUpdate: ', result)
+    const todo = await todoUpdate(id, { checked: !checked })
+    setLastUpdate(todo)
   }
 
   return (
@@ -17,9 +25,20 @@ const todos: FunctionComponent<Props> = ({ todos }) => {
       {todos &&
         todos.map((x, i) => {
           return (
-            <li key={i}>
-              {x.name}{' '}
-              <input type='checkbox' defaultChecked={x.checked} onClick={() => checkboxHandle(x.id, x.checked)} />
+            <li key={x.id}>
+              <fieldset className='flex justify-between items-center gap-x-10 my-1'>
+                <label
+                htmlFor={`${x.id}`}
+                className="select-none cursor-pointer"
+                >{x.name}</label>
+                <input
+                  id={`${x.id}`}
+                  type='checkbox'
+                  defaultChecked={x.checked}
+                  onClick={() => checkboxHandle(x.id, x.checked)}
+                  className='h-4 w-4'
+                />
+              </fieldset>
             </li>
           )
         })}

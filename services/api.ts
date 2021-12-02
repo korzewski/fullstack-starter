@@ -14,5 +14,5 @@ export async function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
     method: 'PUT',
     body: JSON.stringify(todoUpdate),
   })
-  return response
+  return response.json() as Promise<Todo>
 }

@@ -6,6 +6,10 @@ import type { TodoGetAllResponse } from '@/utils/api/types'
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await ensureReqMethod(req, res, ['get'])
 
-  const result: TodoGetAllResponse = await prisma.todo.findMany()
+  const result: TodoGetAllResponse = await prisma.todo.findMany({
+    orderBy: {
+      id: 'asc',
+    },
+  })
   res.json(result)
 }
