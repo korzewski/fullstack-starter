@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { InferGetStaticPropsType } from 'next'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import prisma from '@/services/prisma'
 import Page from '@/components/page'
 import Todos from '@/components/todos'
@@ -17,11 +17,8 @@ const todos = ({ todos }: InferGetStaticPropsType<typeof getStaticProps>) => {
         <Link href='/'>
           <Button className='mx-2'>Back to homepage</Button>
         </Link>
-
-        <Button className='mx-2' onClick={async () => await signOut({ callbackUrl: '/' })}>
-          Sign out
-        </Button>
       </div>
+
       <Todos todos={todos} />
     </Page>
   )

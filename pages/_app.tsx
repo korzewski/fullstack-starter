@@ -2,12 +2,14 @@ import 'tailwindcss/tailwind.css'
 import { useEffect } from 'react'
 import { SessionProvider, useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/react'
+import UserInfo from '@/components/userInfo'
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       {Component.auth ? (
         <Auth>
+          <UserInfo />
           <Component {...pageProps} />
         </Auth>
       ) : (
