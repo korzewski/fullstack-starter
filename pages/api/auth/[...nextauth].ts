@@ -1,12 +1,10 @@
 import NextAuth from 'next-auth'
-import { PrismaClient } from '.prisma/client'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
+import { ExtendedSession } from '@/utils/api/types'
+import prisma from '@/services/prisma'
 
-// TODO: Add database with prisma
 // TODO: Deploy to vercel & test with supabase
-
-const prisma = new PrismaClient()
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -16,4 +14,14 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  callbacks: {
+    session: async ({ session, user }) => {
+      const extendedSession: ExtendedSession = {
+        ...session,
+        userId: user.id,
+      }
+      
+      return Promise.resolve(extendedSession)
+    },
+  },
 })

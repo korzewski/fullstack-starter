@@ -14,7 +14,21 @@ export function ensureReqMethod(req: NextApiRequest, res: NextApiResponse, reqMe
   }
 }
 
-export function getQueryParamNumber(req: NextApiRequest, res: NextApiResponse, queryKey: string) {
+export function getQueryParam(req: NextApiRequest, queryKey: string) {
+  let param = req.query[queryKey]
+
+  if (!param) {
+    throw Error(`Missing query param ${queryKey}`)
+  }
+
+  if (typeof param === 'object') {
+    return param[0]
+  }
+
+  return param
+}
+
+export function getQueryParamNumber(req: NextApiRequest, queryKey: string) {
   let param = req.query[queryKey]
   const parsedParam = Number(param)
 

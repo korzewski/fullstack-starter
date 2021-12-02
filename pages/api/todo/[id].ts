@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from 'next-auth/react'
 import prisma from '@/services/prisma'
-import { getQueryParamNumber, requestHandler } from '@/utils/api'
-import type { TodoUpdateParams, TodoUpdateResponse, TodoGetResponse } from '@/utils/api/types'
+import { getQueryParam, requestHandler } from '@/utils/api'
+import type { TodoUpdateParams, TodoGetResponse, ExtendedSession } from '@/utils/api/types'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await requestHandler(req, res, {
@@ -11,10 +12,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
-  const id = getQueryParamNumber(req, res, 'id')
-
+  const id = getQueryParam(req, 'id')
   const todo: TodoGetResponse = await prisma.todo.findUnique({
-    where: { id: Number(id) },
+    where: { id },
   })
 
   if (!todo) {
@@ -25,12 +25,22 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 const handlePut = async (req: NextApiRequest, res: NextApiResponse) => {
-  const id = getQueryParamNumber(req, res, 'id')
+  const session = (await getSession({ req })) as ExtendedSession
+  const id = getQueryParam(req, 'id')
   const todoUpdate: TodoUpdateParams = JSON.parse(req.body)
 
-  const result: TodoUpdateResponse = await prisma.todo.update({
-    where: { id: Number(id) },
-    data: todoUpdate,
+  const result = await prisma.user.update({
+    where: {
+      id: session?.userId,
+    },
+    data: {
+      Todo: {
+        update: {
+          where: { id },
+          data: todoUpdate,
+        },
+      },
+    },
   })
 
   res.json(result)
