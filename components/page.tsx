@@ -2,17 +2,15 @@ import Head from 'next/head'
 
 export default ({ title, children }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-400">
+    <div className='min-h-screen py-20 flex flex-col items-center bg-gray-400'>
       <Head>
         <title>{title}</title>
       </Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="font-bold text-6xl">{title}</h1>
-        
-        <div className="content mt-10">
-            {children}
-        </div>
+      <main className='w-full max-w-md p-10 gap-5 flex flex-col items-center justify-center text-center shadow-md bg-gray-300 rounded-xl'>
+        <h1 className='text-6xl font-bold'>{title}</h1>
+
+        <div>{children}</div>
       </main>
     </div>
   )
