@@ -11,6 +11,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@next-auth/prisma-adapter": "^1.0.0",
     "@prisma/client": "^3.5.0",
     "next": "latest",
     "next-auth": "^4.0.1",
