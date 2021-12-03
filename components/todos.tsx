@@ -5,13 +5,15 @@ import TodoList from './todoList'
 import TodoAddNew from '@/components/todoAddNew'
 
 const todos = () => {
-  const [todos, setTodos] = useState<Todo[]>()
+  const [todos, setTodos] = useState<Todo[]>([])
   const [lastUpdate, setLastUpdate] = useState<Todo>()
 
   useEffect(() => {
     const fetchData = async () => {
       const todos = await todoGetAll()
-      setTodos(todos)
+      if (todos) {
+        setTodos(todos)
+      }
     }
 
     fetchData().catch(console.error)
