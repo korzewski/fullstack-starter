@@ -3,7 +3,7 @@ import { Todo } from '@prisma/client'
 import React, { FunctionComponent } from 'react'
 
 type Props = {
-  todos: Todo[]
+  todos: Todo[] | undefined
   setLastUpdate: (todo: Todo) => any
 }
 

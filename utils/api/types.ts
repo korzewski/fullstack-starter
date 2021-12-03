@@ -5,7 +5,7 @@ export interface ExtendedSession extends Session {
   userId: string
 }
 
-export type TodoGetResponse = Todo
+export type TodoGetResponse = Todo | null
 export type TodoGetAllResponse = Todo[]
 export type TodoUpdateParams = Prisma.TodoUpdateInput
 export type TodoUpdateResponse = Todo

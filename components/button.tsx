@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-const button = (props, ref) => {
+const button = (props: any, ref: any) => {
   return (
     <button
       ref={ref}

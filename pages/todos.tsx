@@ -6,17 +6,18 @@ import Button from '@/components/button'
 const todos = () => {
   return (
     <Page title='Todos'>
-      <div>
-        <Link href='/'>
-          <Button className='mx-2'>Back to homepage</Button>
-        </Link>
-      </div>
+      <>
+        <div>
+          <Link href='/'>
+            <Button className='mx-2'>Back to homepage</Button>
+          </Link>
+        </div>
 
-      <Todos />
+        <Todos />
+      </>
     </Page>
   )
 }
 
 todos.auth = true
 export default todos
-

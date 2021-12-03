@@ -20,7 +20,8 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
       Todo: { orderBy: { id: 'asc' } },
     },
   })
-  res.json(result.Todo)
+
+  res.json(result?.Todo)
 }
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {

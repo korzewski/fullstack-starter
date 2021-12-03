@@ -1,6 +1,12 @@
+import { ReactElement } from 'react'
 import Head from 'next/head'
 
-export default ({ title, children }) => {
+type Props = {
+  title: string
+  children: ReactElement
+}
+
+const Button = ({ title, children }: Props) => {
   return (
     <div className='min-h-screen py-20 flex flex-col items-center bg-gray-400'>
       <Head>
@@ -15,3 +21,5 @@ export default ({ title, children }) => {
     </div>
   )
 }
+
+export default Button

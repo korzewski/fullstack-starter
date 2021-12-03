@@ -3,12 +3,12 @@ import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 const requestKeys = <const>['get', 'post', 'put', 'delete']
 type RequestKeys = typeof requestKeys[number]
 
-export function resError(res: NextApiResponse, error: Error, errorCode = 400) {
+export function resError(res: NextApiResponse, error: any, errorCode = 400) {
   res.status(errorCode).json({ error: `${error}` })
 }
 
 export function ensureReqMethod(req: NextApiRequest, res: NextApiResponse, reqMethods: RequestKeys[]) {
-  if (!reqMethods.includes(req.method.toLowerCase() as RequestKeys)) {
+  if (!reqMethods.includes(req.method?.toLowerCase() as RequestKeys)) {
     const errorMessage = new Error(`The HTTP ${req.method} method is not supported at this route.`)
     resError(res, errorMessage)
   }
@@ -45,7 +45,11 @@ export async function requestHandler(
   requests: Partial<{ [k in RequestKeys]: NextApiHandler<void> }>,
 ) {
   try {
-    const handler = requests[req.method.toLowerCase() as RequestKeys]
+    const handler = requests[req.method?.toLowerCase() as RequestKeys]
+    if (!handler) {
+      throw Error('requestHandler - handler is undefined')
+    }
+
     await handler(req, res)
   } catch (e) {
     resError(res, e)

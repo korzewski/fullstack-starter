@@ -20,7 +20,7 @@ const todos = () => {
   return (
     <div>
       <TodoAddNew />
-      <TodoList todos={todos} setLastUpdate={setLastUpdate} />
+      <TodoList todos={todos || []} setLastUpdate={setLastUpdate} />
     </div>
   )
 }
