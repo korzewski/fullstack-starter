@@ -9,6 +9,8 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:reset": "prisma migrate reset --force --skip-seed",
+    "db:migrate:prod": "prisma migrate deploy",
+    "ci:build": "npm run db:migrate:prod && npm run build",
     "prettier": "prettier --write ."
   },
   "dependencies": {
