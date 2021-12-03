@@ -4,8 +4,6 @@ import GoogleProvider from 'next-auth/providers/google'
 import { ExtendedSession } from '@/utils/api/types'
 import prisma from '@/services/prisma'
 
-// TODO: Deploy to vercel & test with supabase
-
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   secret: process.env.SECRET,
