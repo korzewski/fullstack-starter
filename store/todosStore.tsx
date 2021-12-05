@@ -31,7 +31,10 @@ export function useTodosStore() {
     },
 
     async setItemChecked(id: Todo['id'], checked: Todo['checked']) {
-      await todoUpdate(id, { checked })
+      let todo = await todoUpdate(id, { checked })
+      if (!todo) {
+        return
+      }
 
       const index = this.state.listOfItems.findIndex(x => x.id == id)
       if (index !== -1) {

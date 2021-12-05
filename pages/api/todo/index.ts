@@ -13,15 +13,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = (await getSession({ req })) as ExtendedSession
-
-  const result = await prisma.user.findUnique({
-    where: { id: session?.userId },
-    select: {
-      Todo: { orderBy: { id: 'asc' } },
-    },
+  const result = await prisma.todo.findMany({
+    where: {
+      userId: session.userId,
+    }
   })
 
-  res.json(result?.Todo)
+  res.json(result)
 }
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {

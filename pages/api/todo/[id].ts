@@ -7,27 +7,40 @@ import type { TodoUpdateParams, ExtendedSession, TodoUpdateResponse } from '@/ut
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await requestHandler(req, res, {
     put: handlePut,
+    delete: handleDelete,
   })
 }
 
 const handlePut = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = (await getSession({ req })) as ExtendedSession
   const id = getQueryParam(req, 'id')
-  const todoUpdate: TodoUpdateParams = req.body
+  const data: TodoUpdateParams = req.body
 
-  const result = (await prisma.user.update({
+  const result = await prisma.todo.update({
     where: {
-      id: session?.userId,
-    },
-    data: {
-      Todo: {
-        update: {
-          where: { id },
-          data: todoUpdate,
-        },
+      id_userId: {
+        id,
+        userId: session.userId,
       },
     },
-  })) as TodoUpdateResponse
+    data,
+  })
 
   res.json(result)
+}
+
+const handleDelete = async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = (await getSession({ req })) as ExtendedSession
+  const id = getQueryParam(req, 'id')
+
+  const todo = await prisma.todo.delete({
+    where: {
+      id_userId: {
+        id,
+        userId: session.userId,
+      },
+    },
+  })
+
+  res.json(todo)
 }
