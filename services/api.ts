@@ -1,5 +1,5 @@
 import type { Todo, Prisma } from '@prisma/client'
-import { TodoGetAllResponse, TodoGetResponse, TodoUpdateParams } from '@/utils/api/types'
+import { TodoAddResponse, TodoGetAllResponse, TodoUpdateParams, TodoUpdateResponse } from '@/utils/api/types'
 
 export async function todoGetAll() {
   const result = (await (await fetch(`/api/todo`)).json()) as TodoGetAllResponse
@@ -12,25 +12,38 @@ export async function todoGetAll() {
   }
 }
 
-export async function todoGet(id: Todo['id']) {
-  // TODO: Handle error
-  return (await fetch(`/api/todo/${id}`)).json() as Promise<TodoGetResponse>
-}
-
 export async function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
-  // TODO: Handle error
-  const response = await fetch(`/api/todo/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(todoUpdate),
-  })
-  return response.json() as Promise<Todo>
+  const response = (await (
+    await fetch(`/api/todo/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(todoUpdate),
+    })
+  ).json()) as TodoUpdateResponse
+
+  // @ts-ignore
+  if (response.error) {
+    // @ts-ignore
+    console.error(response.error)
+    return
+  }
+
+  return response
 }
 
 export async function todoAdd(todo: Prisma.TodoCreateManyInput) {
-  // TODO: Handle error
-  const response = await fetch(`/api/todo`, {
-    method: 'POST',
-    body: JSON.stringify(todo),
-  })
-  return response.json() as Promise<Todo>
+  const response = (await (
+    await fetch(`/api/todo`, {
+      method: 'POST',
+      body: JSON.stringify(todo),
+    })
+  ).json()) as TodoAddResponse
+
+  // @ts-ignore
+  if (response.error) {
+    // @ts-ignore
+    console.error(response.error)
+    return
+  }
+
+  return response as Todo
 }

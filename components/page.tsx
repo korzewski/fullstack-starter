@@ -8,7 +8,7 @@ type Props = {
 
 const Button = ({ title, children }: Props) => {
   return (
-    <div className='min-h-screen py-20 flex flex-col items-center bg-gray-400'>
+    <div className='min-h-screen py-20 px-3 flex flex-col items-center bg-gray-400'>
       <Head>
         <title>{title}</title>
       </Head>

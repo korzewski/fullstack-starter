@@ -46,7 +46,9 @@ export function useTodosStore() {
       }
 
       const todo = await todoAdd(newTodo)
-      todosStore.listOfItems.merge([todo])
+      if (todo) {
+        todosStore.listOfItems.merge([todo])
+      }
     },
   }
 }
