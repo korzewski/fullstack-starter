@@ -20,9 +20,11 @@ const todoAddNew = () => {
   }
 
   return (
-    <form className='flex gap-2 mt-10'>
+    <form className={`flex gap-2 mt-10`}>
       <input value={name} onChange={e => setName(e.target.value)} type='text' autoFocus={true} className='rounded-md' />
-      <Button onClick={submit}>Create new</Button>
+      <Button disabled={todosStore.state.isLoading || !name} onClick={submit}>
+        Create new
+      </Button>
     </form>
   )
 }
