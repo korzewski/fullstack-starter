@@ -1,49 +1,39 @@
+import axios from 'axios'
 import type { Todo, Prisma } from '@prisma/client'
 import { TodoAddResponse, TodoGetAllResponse, TodoUpdateParams, TodoUpdateResponse } from '@/utils/api/types'
 
-export async function todoGetAll() {
-  const result = (await (await fetch(`/api/todo`)).json()) as TodoGetAllResponse
+function handleCatch<T>(err: any, returnValue: T) {
+  if (axios.isAxiosError(err)) {
+    console.error('--- ', err.response?.data?.error)
+    return returnValue
+  }
 
-  if (Array.isArray(result)) {
-    return result
-  } else if (result.error) {
-    console.error(result.error)
-    return []
+  console.error(err)
+}
+
+export async function todoGetAll() {
+  try {
+    const response = await axios.get<TodoGetAllResponse>('/api/todo')
+    return response.data
+  } catch (err) {
+    return handleCatch(err, [])
   }
 }
 
 export async function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
-  const response = (await (
-    await fetch(`/api/todo/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(todoUpdate),
-    })
-  ).json()) as TodoUpdateResponse
-
-  // @ts-ignore
-  if (response.error) {
-    // @ts-ignore
-    console.error(response.error)
-    return
+  try {
+    const response = await axios.put<TodoUpdateResponse>(`/api/todo/${id}`, todoUpdate)
+    return response.data
+  } catch (err) {
+    return handleCatch(err, undefined)
   }
-
-  return response
 }
 
 export async function todoAdd(todo: Prisma.TodoCreateManyInput) {
-  const response = (await (
-    await fetch(`/api/todo`, {
-      method: 'POST',
-      body: JSON.stringify(todo),
-    })
-  ).json()) as TodoAddResponse
-
-  // @ts-ignore
-  if (response.error) {
-    // @ts-ignore
-    console.error(response.error)
-    return
+  try {
+    const response = await axios.post<TodoAddResponse>('/api/todo', todo)
+    return response.data
+  } catch (err) {
+    return handleCatch(err, undefined)
   }
-
-  return response as Todo
 }

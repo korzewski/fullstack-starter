@@ -13,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 const handlePut = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = (await getSession({ req })) as ExtendedSession
   const id = getQueryParam(req, 'id')
-  const todoUpdate: TodoUpdateParams = JSON.parse(req.body)
+  const todoUpdate: TodoUpdateParams = req.body
 
   const result = (await prisma.user.update({
     where: {

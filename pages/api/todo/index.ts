@@ -26,7 +26,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = (await getSession({ req })) as ExtendedSession
-  const newTodo: TodoAddParams = JSON.parse(req.body)
+  const newTodo: TodoAddParams = req.body
 
   if (session?.userId !== newTodo.userId) {
     throw Error('Access denied')

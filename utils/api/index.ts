@@ -4,6 +4,7 @@ const requestKeys = <const>['get', 'post', 'put', 'delete']
 type RequestKeys = typeof requestKeys[number]
 
 export function resError(res: NextApiResponse, error: any, errorCode = 400) {
+  console.error(`--- ${error}`)
   res.status(errorCode).json({ error: `${error}` })
 }
 
