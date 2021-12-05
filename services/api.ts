@@ -37,3 +37,12 @@ export async function todoAdd(todo: Prisma.TodoCreateManyInput) {
     return handleCatch(err, undefined)
   }
 }
+
+export async function todoRemove(id: Todo['id']) {
+  try {
+    const response = await axios.delete<Todo>(`/api/todo/${id}`)
+    return response.data
+  } catch (err) {
+    return handleCatch(err, undefined)
+  }
+}

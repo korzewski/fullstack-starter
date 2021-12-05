@@ -1,6 +1,6 @@
 import { Todo } from '.prisma/client'
-import { todoAdd, todoGetAll, todoUpdate } from '@/services/api'
-import { createState, useState } from '@hookstate/core'
+import { todoAdd, todoGetAll, todoRemove, todoUpdate } from '@/services/api'
+import { createState, none, useState } from '@hookstate/core'
 import { Prisma } from '@prisma/client'
 import { useEffect } from 'react'
 
@@ -51,6 +51,18 @@ export function useTodosStore() {
       const todo = await todoAdd(newTodo)
       if (todo) {
         todosStore.listOfItems.merge([todo])
+      }
+    },
+
+    async removeItem(id: string) {
+      const todo = await todoRemove(id)
+      if (!todo) {
+        return
+      }
+
+      const index = this.state.listOfItems.findIndex(x => x.id == id)
+      if (index !== -1) {
+        todosStore.listOfItems[index].set(none)
       }
     },
   }
