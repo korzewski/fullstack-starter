@@ -1,32 +1,27 @@
 import React, { useState } from 'react'
 import Button from '@/components/button'
-import { todoAdd } from '@/services/api'
 import { useSession } from 'next-auth/react'
 import type { ExtendedSession } from '@/utils/api/types'
-import { Prisma } from '@prisma/client'
+import { useTodosStore } from 'store/todosStore'
 
 const todoAddNew = () => {
   const sessionData = useSession()
   const session = sessionData.data as ExtendedSession
-  const [task, setTask] = useState('')
+  const todosStore = useTodosStore()
+  const [name, setName] = useState('')
 
   const submit = async (e: SubmitEvent) => {
     e.preventDefault()
 
-    if (task) {
-      setTask('')
-      const newTodo: Prisma.TodoCreateManyInput = {
-        name: task,
-        userId: session.userId,
-      }
-
-      await todoAdd(newTodo)
+    if (name) {
+      setName('')
+      await todosStore.addNewItem(name, session.userId)
     }
   }
 
   return (
     <form className='flex gap-2 mt-10'>
-      <input value={task} onChange={e => setTask(e.target.value)} type='text' autoFocus={true} className='rounded-md' />
+      <input value={name} onChange={e => setName(e.target.value)} type='text' autoFocus={true} className='rounded-md' />
       <Button onClick={submit}>Create new</Button>
     </form>
   )

@@ -1,22 +1,12 @@
-import { todoUpdate } from '@/services/api'
-import { Todo } from '@prisma/client'
-import React, { FunctionComponent } from 'react'
+import { useTodosStore } from 'store/todosStore'
 
-type Props = {
-  todos: Todo[] | undefined
-  setLastUpdate: (todo: Todo) => any
-}
-
-const todoList: FunctionComponent<Props> = ({ todos, setLastUpdate }) => {
-  const checkboxHandle = async (id: Todo['id'], checked: Todo['checked']) => {
-    const todo = await todoUpdate(id, { checked: !checked })
-    setLastUpdate(todo)
-  }
+const todoList = () => {
+  const todosStore = useTodosStore()
+  todosStore.useFetchListOfItems()
 
   return (
     <ul className='mt-10'>
-      {todos &&
-        todos.map(x => {
+      { todosStore.state.listOfItems.map(x => {
           return (
             <li key={x.id}>
               <fieldset className='flex justify-between items-center gap-x-10 my-1'>
@@ -26,8 +16,8 @@ const todoList: FunctionComponent<Props> = ({ todos, setLastUpdate }) => {
                 <input
                   id={`${x.id}`}
                   type='checkbox'
-                  defaultChecked={x.checked}
-                  onClick={() => checkboxHandle(x.id, x.checked)}
+                  checked={x.checked}
+                  onChange={() => todosStore.setItemChecked(x.id, !x.checked)}
                   className='h-4 w-4'
                 />
               </fieldset>
