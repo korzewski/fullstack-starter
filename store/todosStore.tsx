@@ -40,6 +40,7 @@ export function useTodosStore() {
 
       let todo = await todoUpdate(id, { checked })
       if (!todo) {
+        todosStore.isLoading.set(false)
         return
       }
 
@@ -71,6 +72,7 @@ export function useTodosStore() {
 
       const todo = await todoRemove(id)
       if (!todo) {
+        todosStore.isLoading.set(false)
         return
       }
 

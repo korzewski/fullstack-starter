@@ -1,48 +1,20 @@
 import axios from 'axios'
 import type { Todo, Prisma } from '@prisma/client'
 import { TodoAddResponse, TodoGetAllResponse, TodoUpdateParams, TodoUpdateResponse } from '@/utils/api/types'
+import { axiosHandler } from '@/utils/api'
 
-function handleCatch<T>(err: any, returnValue: T) {
-  if (axios.isAxiosError(err)) {
-    console.error('--- ', err.response?.data?.error)
-    return returnValue
-  }
-
-  console.error(err)
+export function todoGetAll() {
+  return axiosHandler<TodoGetAllResponse>(() => axios.get('/api/todo'))
 }
 
-export async function todoGetAll() {
-  try {
-    const response = await axios.get<TodoGetAllResponse>('/api/todo')
-    return response.data
-  } catch (err) {
-    return handleCatch(err, [])
-  }
+export function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
+  return axiosHandler<TodoUpdateResponse>(() => axios.put(`/api/todo/${id}`, todoUpdate))
 }
 
-export async function todoUpdate(id: Todo['id'], todoUpdate: TodoUpdateParams) {
-  try {
-    const response = await axios.put<TodoUpdateResponse>(`/api/todo/${id}`, todoUpdate)
-    return response.data
-  } catch (err) {
-    return handleCatch(err, undefined)
-  }
-}
-
-export async function todoAdd(todo: Prisma.TodoCreateManyInput) {
-  try {
-    const response = await axios.post<TodoAddResponse>('/api/todo', todo)
-    return response.data
-  } catch (err) {
-    return handleCatch(err, undefined)
-  }
+export function todoAdd(todo: Prisma.TodoCreateManyInput) {
+  return axiosHandler<TodoAddResponse>(() => axios.post(`/api/todo/`, todo))
 }
 
 export async function todoRemove(id: Todo['id']) {
-  try {
-    const response = await axios.delete<Todo>(`/api/todo/${id}`)
-    return response.data
-  } catch (err) {
-    return handleCatch(err, undefined)
-  }
+  return axiosHandler<Todo>(() => axios.delete(`/api/todo/${id}`))
 }
